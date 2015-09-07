@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class WorldCities {
@@ -20,21 +21,34 @@ public static void main(String[] args) throws ClassNotFoundException, SQLExcepti
 		
 		Scanner input = new Scanner(System.in);
 		
-		System.out.print("Za pretragu gradova unesite '1'\nZa pretragu drzava  unesite '2'\nUnos: ");
+		boolean isOn = true;
 		
-		int broj = input.nextInt();
-		
-		while(broj <= 0 || broj > 2) {
-			System.out.println("Pogresan unos!");
-			System.out.print("Za pretragu gradova unesite '1'\nZa pretragu drzava  unesite '2'\nUnos: ");
-			broj = input.nextInt();
-		}
-		
-		if(broj == 1) {  // ako je unos 1
-			grad();      // pozivanje metode za pretragu gradova iz baze
-		} else {         // ako je unos 2
-			drzava();    // pozivanje metode za pretragu drzave iz baze
-		}
+		do {
+			try {
+				
+				System.out.print("Za pretragu gradova unesite '1'\nZa pretragu drzava  unesite '2'\nUnos: ");
+				
+				int broj = input.nextInt();
+				
+				while(broj <= 0 || broj > 2) {
+					System.out.println("Pogresan unos!");
+					System.out.print("Za pretragu gradova unesite '1'\nZa pretragu drzava  unesite '2'\nUnos: ");
+					broj = input.nextInt();
+				}
+				
+				if(broj == 1) {  // ako je unos 1
+					grad();      // pozivanje metode za pretragu gradova iz baze
+				} else {         // ako je unos 2
+					drzava();    // pozivanje metode za pretragu drzave iz baze
+				}
+				isOn = false;    // uslov ispunjen, petlja prekida sa radom
+				
+			} catch(InputMismatchException ex) { // 'hvatanje' i ispis greske
+				System.out.println("Greska, pogresan unos!");
+				input.nextLine();
+			}
+			
+		} while(isOn);               // petlja radi dok se uslov ne ispuni
 		
 		input.close();
 		
